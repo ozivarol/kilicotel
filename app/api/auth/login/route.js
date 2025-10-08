@@ -1,38 +1,35 @@
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const dataFilePath = path.join(process.cwd(), "data", "users.json");
-
-function readUsers() {
-  const fileData = fs.readFileSync(dataFilePath, "utf8");
-  return JSON.parse(fileData);
-}
 
 export async function POST(request) {
   try {
     const { username, password } = await request.json();
-    const data = readUsers();
 
-    const user = data.users.find(
-      (u) => u.username === username && u.password === password
-    );
+    const { rows } = await sql`
+      SELECT id, username
+      FROM users
+      WHERE username = ${username} AND password = ${password}
+    `;
 
-    if (user) {
+    if (rows.length > 0) {
+      const user = rows[0];
       const response = NextResponse.json({
         success: true,
         user: { id: user.id, username: user.username },
       });
+
       response.cookies.set("auth", "true", {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 7,
         path: "/",
       });
+
       response.cookies.set("userId", user.id.toString(), {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 7,
         path: "/",
       });
+
       return response;
     } else {
       return NextResponse.json(
@@ -41,8 +38,9 @@ export async function POST(request) {
       );
     }
   } catch (error) {
+    console.error("Login error:", error);
     return NextResponse.json(
-      { success: false, message: "Bir hata oluştu" },
+      { success: false, message: "Bir hata oluştu: " + error.message },
       { status: 500 }
     );
   }

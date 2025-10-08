@@ -1,25 +1,30 @@
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const dataFilePath = path.join(process.cwd(), "data", "rooms.json");
-
-function readRooms() {
-  const fileData = fs.readFileSync(dataFilePath, "utf8");
-  return JSON.parse(fileData);
-}
 
 export async function GET(request, { params }) {
   try {
-    const rooms = readRooms();
-    const room = rooms.find((r) => r.id === parseInt(params.id));
+    const { rows } = await sql`
+      SELECT 
+        id,
+        room_number as "roomNumber",
+        status,
+        breakfast,
+        reservation_date as "reservationDate",
+        notes
+      FROM rooms
+      WHERE id = ${params.id}
+    `;
 
-    if (room) {
-      return NextResponse.json(room);
+    if (rows.length > 0) {
+      return NextResponse.json(rows[0]);
     } else {
       return NextResponse.json({ error: "Oda bulunamadı" }, { status: 404 });
     }
   } catch (error) {
-    return NextResponse.json({ error: "Oda okunamadı" }, { status: 500 });
+    console.error("GET Error:", error);
+    return NextResponse.json(
+      { error: "Oda okunamadı: " + error.message },
+      { status: 500 }
+    );
   }
 }

@@ -1,36 +1,27 @@
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const dataFilePath = path.join(process.cwd(), "data", "rooms.json");
-
-function readRooms() {
-  try {
-    const fileData = fs.readFileSync(dataFilePath, "utf8");
-    return JSON.parse(fileData);
-  } catch (error) {
-    console.error("Error reading rooms:", error);
-    return [];
-  }
-}
-
-function writeRooms(rooms) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(rooms, null, 2));
-    return true;
-  } catch (error) {
-    console.error("Error writing rooms:", error);
-    return false;
-  }
-}
 
 export async function GET() {
   try {
-    const rooms = readRooms();
-    return NextResponse.json(rooms);
+    const { rows } = await sql`
+      SELECT 
+        id,
+        room_number as "roomNumber",
+        status,
+        breakfast,
+        reservation_date as "reservationDate",
+        notes
+      FROM rooms
+      ORDER BY id ASC
+    `;
+
+    return NextResponse.json(rows);
   } catch (error) {
     console.error("GET Error:", error);
-    return NextResponse.json({ error: "Odalar okunamadı" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Odalar okunamadı: " + error.message },
+      { status: 500 }
+    );
   }
 }
 
@@ -39,28 +30,32 @@ export async function PUT(request) {
     const updatedRoom = await request.json();
     console.log("Updating room:", updatedRoom);
 
-    const rooms = readRooms();
-    const index = rooms.findIndex((room) => room.id === updatedRoom.id);
+    await sql`
+      UPDATE rooms
+      SET 
+        status = ${updatedRoom.status},
+        breakfast = ${updatedRoom.breakfast},
+        reservation_date = ${updatedRoom.reservationDate || ""},
+        notes = ${updatedRoom.notes || ""}
+      WHERE id = ${updatedRoom.id}
+    `;
 
-    if (index !== -1) {
-      rooms[index] = {
-        ...rooms[index],
-        ...updatedRoom,
-      };
+    const { rows } = await sql`
+      SELECT 
+        id,
+        room_number as "roomNumber",
+        status,
+        breakfast,
+        reservation_date as "reservationDate",
+        notes
+      FROM rooms
+      WHERE id = ${updatedRoom.id}
+    `;
 
-      const writeSuccess = writeRooms(rooms);
-
-      if (writeSuccess) {
-        console.log("Room updated successfully:", rooms[index]);
-        return NextResponse.json(rooms[index]);
-      } else {
-        return NextResponse.json(
-          { error: "Oda kaydedilemedi" },
-          { status: 500 }
-        );
-      }
+    if (rows.length > 0) {
+      console.log("Room updated successfully:", rows[0]);
+      return NextResponse.json(rows[0]);
     } else {
-      console.error("Room not found:", updatedRoom.id);
       return NextResponse.json({ error: "Oda bulunamadı" }, { status: 404 });
     }
   } catch (error) {
