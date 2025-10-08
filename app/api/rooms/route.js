@@ -30,6 +30,10 @@ export async function PUT(request) {
     const updatedRoom = await request.json();
     console.log("Updating room:", updatedRoom);
 
+    const { rows: oldRoomData } = await sql`
+      SELECT status FROM rooms WHERE id = ${updatedRoom.id}
+    `;
+
     await sql`
       UPDATE rooms
       SET 
@@ -39,6 +43,13 @@ export async function PUT(request) {
         notes = ${updatedRoom.notes || ""}
       WHERE id = ${updatedRoom.id}
     `;
+
+    if (oldRoomData.length > 0 && oldRoomData[0].status !== updatedRoom.status) {
+      await sql`
+        INSERT INTO room_history (room_id, room_number, old_status, new_status, created_at)
+        VALUES (${updatedRoom.id}, ${updatedRoom.roomNumber}, ${oldRoomData[0].status}, ${updatedRoom.status}, NOW())
+      `;
+    }
 
     const { rows } = await sql`
       SELECT 

@@ -13,7 +13,9 @@ export default function Sidebar() {
 
   const menuItems = [
     { name: "Odalar", path: "/odalar" },
+    { name: "Rezervasyonlar", path: "/rezervasyonlar" },
     { name: "Finans", path: "/finans" },
+    { name: "İstatistikler", path: "/istatistikler" },
   ];
 
   const handleLogout = async () => {
@@ -31,26 +33,11 @@ export default function Sidebar() {
         onClick={() => setIsOpen(!isOpen)}
         className="md:hidden fixed top-4 left-4 z-50 bg-[#6943b8] text-white p-3 rounded-lg shadow-lg hover:bg-[#3c43b5] transition-colors"
       >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {isOpen ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           )}
         </svg>
       </button>
@@ -69,13 +56,7 @@ export default function Sidebar() {
       >
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <Image
-              src="/otellogo.png"
-              alt="Logo"
-              width={45}
-              height={45}
-              className="rounded-lg"
-            />
+            <Image src="/otellogo.png" alt="Logo" width={45} height={45} className="rounded-lg" />
             <div>
               <h1 className="text-xl font-bold text-gray-900">Kılıçotel</h1>
               <p className="text-xs text-gray-500">Yönetim Paneli</p>
@@ -107,18 +88,8 @@ export default function Sidebar() {
               onClick={() => setShowPasswordModal(true)}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all font-medium text-sm"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-                />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
               </svg>
               Şifre Değiştir
             </button>
@@ -130,24 +101,12 @@ export default function Sidebar() {
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Çıkış Yap
           </button>
-          <p className="text-xs text-gray-500 text-center mt-4">
-            © 2025 Kılıçotel
-          </p>
+          <p className="text-xs text-gray-500 text-center mt-4">© 2025 Kılıçotel</p>
         </div>
       </div>
 
@@ -223,18 +182,8 @@ function PasswordChangeModal({ onClose }) {
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>

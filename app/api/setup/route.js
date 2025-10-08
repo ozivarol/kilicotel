@@ -33,6 +33,17 @@ export async function GET() {
       )
     `;
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS room_history (
+        id SERIAL PRIMARY KEY,
+        room_id INTEGER NOT NULL,
+        room_number VARCHAR(10) NOT NULL,
+        old_status VARCHAR(20),
+        new_status VARCHAR(20),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+
     const roomsCount = await sql`SELECT COUNT(*) FROM rooms`;
     if (roomsCount.rows[0].count === "0") {
       for (let i = 1; i <= 22; i++) {
@@ -54,7 +65,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: "Database initialized successfully",
-      tables: ["rooms", "users", "finances"],
+      tables: ["rooms", "users", "finances", "room_history"],
     });
   } catch (error) {
     console.error("Setup error:", error);
