@@ -8,9 +8,7 @@ export async function GET() {
         id INTEGER PRIMARY KEY,
         room_number VARCHAR(10) NOT NULL,
         status VARCHAR(20) DEFAULT 'boş',
-        breakfast BOOLEAN DEFAULT false,
-        reservation_date VARCHAR(50) DEFAULT '',
-        notes TEXT DEFAULT ''
+        breakfast BOOLEAN DEFAULT false
       )
     `;
 
@@ -34,6 +32,17 @@ export async function GET() {
     `;
 
     await sql`
+      CREATE TABLE IF NOT EXISTS reservations (
+        id SERIAL PRIMARY KEY,
+        room_id INTEGER NOT NULL,
+        room_number VARCHAR(10) NOT NULL,
+        reservation_date DATE NOT NULL,
+        notes TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+
+    await sql`
       CREATE TABLE IF NOT EXISTS room_history (
         id SERIAL PRIMARY KEY,
         room_id INTEGER NOT NULL,
@@ -48,8 +57,8 @@ export async function GET() {
     if (roomsCount.rows[0].count === "0") {
       for (let i = 1; i <= 22; i++) {
         await sql`
-          INSERT INTO rooms (id, room_number, status, breakfast, reservation_date, notes)
-          VALUES (${i}, ${i.toString()}, 'boş', false, '', '')
+          INSERT INTO rooms (id, room_number, status, breakfast)
+          VALUES (${i}, ${i.toString()}, 'boş', false)
         `;
       }
     }
@@ -65,7 +74,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: "Database initialized successfully",
-      tables: ["rooms", "users", "finances", "room_history"],
+      tables: ["rooms", "users", "finances", "reservations", "room_history"],
     });
   } catch (error) {
     console.error("Setup error:", error);

@@ -5,43 +5,46 @@ import Calendar from "../components/Calendar";
 
 export default function RezervasyonlarPage() {
   const [rooms, setRooms] = useState([]);
+  const [allReservations, setAllReservations] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchRooms();
+    fetchData();
   }, []);
 
-  const fetchRooms = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch("/api/rooms");
-      const data = await response.json();
-      setRooms(data);
+      const roomsRes = await fetch("/api/rooms");
+      const roomsData = await roomsRes.json();
+      setRooms(roomsData);
+
+      const reservationsRes = await fetch("/api/reservations");
+      const reservationsData = await reservationsRes.json();
+      setAllReservations(reservationsData.reservations || []);
+
       setLoading(false);
     } catch (error) {
-      console.error("Odalar yüklenemedi:", error);
+      console.error("Veri yüklenemedi:", error);
       setLoading(false);
     }
   };
 
-  const getRoomsForDate = () => {
-    return rooms.filter((room) => {
-      if (room.status === "rezerve" && room.reservationDate) {
-        const reservationDate = new Date(room.reservationDate);
-        return (
-          reservationDate.getFullYear() === selectedDate.getFullYear() &&
-          reservationDate.getMonth() === selectedDate.getMonth() &&
-          reservationDate.getDate() === selectedDate.getDate()
-        );
-      }
-      return false;
+  const getReservationsForDate = () => {
+    return allReservations.filter((reservation) => {
+      const reservationDate = new Date(reservation.reservation_date);
+      return (
+        reservationDate.getFullYear() === selectedDate.getFullYear() &&
+        reservationDate.getMonth() === selectedDate.getMonth() &&
+        reservationDate.getDate() === selectedDate.getDate()
+      );
     });
   };
 
   const getStats = () => {
     const bos = rooms.filter((r) => r.status === "boş").length;
     const dolu = rooms.filter((r) => r.status === "dolu").length;
-    const rezerve = rooms.filter((r) => r.status === "rezerve").length;
+    const rezerve = allReservations.length;
     return { bos, dolu, rezerve };
   };
 
@@ -55,7 +58,7 @@ export default function RezervasyonlarPage() {
     );
   }
 
-  const reservedRoomsForDate = getRoomsForDate();
+  const reservationsForDate = getReservationsForDate();
   const stats = getStats();
 
   return (
@@ -98,7 +101,7 @@ export default function RezervasyonlarPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600 mb-1">Rezerve</p>
+                <p className="text-xs text-gray-600 mb-1">Toplam Rezervasyon</p>
                 <p className="text-2xl font-bold text-yellow-600">{stats.rezerve}</p>
               </div>
               <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -119,10 +122,6 @@ export default function RezervasyonlarPage() {
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                   <span className="text-gray-700">Dolu Oda Var</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-gray-700">Rezerve Oda Var</span>
-                </div>
               </div>
             </div>
           </div>
@@ -138,7 +137,7 @@ export default function RezervasyonlarPage() {
               </h2>
 
               <div className="space-y-3">
-                {reservedRoomsForDate.length === 0 ? (
+                {reservationsForDate.length === 0 ? (
                   <div className="text-center py-8">
                     <svg
                       className="w-16 h-16 mx-auto text-gray-300 mb-3"
@@ -160,24 +159,24 @@ export default function RezervasyonlarPage() {
                 ) : (
                   <>
                     <p className="text-sm text-gray-600 mb-3">
-                      {reservedRoomsForDate.length} rezerve oda
+                      {reservationsForDate.length} rezervasyon
                     </p>
-                    {reservedRoomsForDate.map((room) => (
+                    {reservationsForDate.map((reservation) => (
                       <div
-                        key={room.id}
+                        key={reservation.id}
                         className="border-2 border-yellow-200 bg-yellow-50 rounded-lg p-3 hover:border-yellow-300 transition-colors"
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-lg font-bold text-gray-900">
-                            Oda {room.roomNumber}
+                            Oda {reservation.room_number}
                           </span>
                           <span className="text-xs px-2 py-1 bg-yellow-500 text-white rounded">
                             Rezerve
                           </span>
                         </div>
-                        {room.notes && (
+                        {reservation.notes && (
                           <p className="text-sm text-gray-700 mt-2 bg-white p-2 rounded">
-                            {room.notes}
+                            {reservation.notes}
                           </p>
                         )}
                       </div>
@@ -201,4 +200,3 @@ export default function RezervasyonlarPage() {
     </div>
   );
 }
-

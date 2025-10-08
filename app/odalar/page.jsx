@@ -26,9 +26,8 @@ export default function OdalarPage() {
   const getStats = () => {
     const bos = rooms.filter((r) => r.status === "boş").length;
     const dolu = rooms.filter((r) => r.status === "dolu").length;
-    const rezerve = rooms.filter((r) => r.status === "rezerve").length;
     const kahvalti = rooms.filter((r) => r.breakfast === true).length;
-    return { bos, dolu, rezerve, kahvalti };
+    return { bos, dolu, kahvalti };
   };
 
   if (loading) {
@@ -53,7 +52,7 @@ export default function OdalarPage() {
           <p className="text-gray-600">Toplam {rooms.length} oda yönetimi</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div className="flex items-center justify-between">
               <div>
@@ -74,20 +73,6 @@ export default function OdalarPage() {
               </div>
               <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                 <div className="w-6 h-6 bg-red-500 rounded"></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Rezerve</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {stats.rezerve}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <div className="w-6 h-6 bg-yellow-500 rounded"></div>
               </div>
             </div>
           </div>
@@ -129,20 +114,11 @@ export default function OdalarPage() {
               <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
               <span className="text-sm text-gray-600">Dolu</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-yellow-500 rounded-sm"></div>
-              <span className="text-sm text-gray-600">Rezerve</span>
-            </div>
           </div>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-11 gap-3">
             {rooms.map((room) => {
-              const statusColor =
-                room.status === "boş"
-                  ? "green"
-                  : room.status === "dolu"
-                  ? "red"
-                  : "yellow";
+              const statusColor = room.status === "boş" ? "green" : "red";
               return (
                 <Link
                   key={room.id}

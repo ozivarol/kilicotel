@@ -43,7 +43,6 @@ export async function GET(request) {
     const currentStats = {
       bosOdalar: rooms.filter((r) => r.status === "boş").length,
       doluOdalar: rooms.filter((r) => r.status === "dolu").length,
-      rezerveOdalar: rooms.filter((r) => r.status === "rezerve").length,
       kahvaltiVerilen: rooms.filter((r) => r.breakfast === true).length,
     };
 

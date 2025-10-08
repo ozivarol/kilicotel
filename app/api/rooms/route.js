@@ -8,9 +8,7 @@ export async function GET() {
         id,
         room_number as "roomNumber",
         status,
-        breakfast,
-        reservation_date as "reservationDate",
-        notes
+        breakfast
       FROM rooms
       ORDER BY id ASC
     `;
@@ -38,9 +36,7 @@ export async function PUT(request) {
       UPDATE rooms
       SET 
         status = ${updatedRoom.status},
-        breakfast = ${updatedRoom.breakfast},
-        reservation_date = ${updatedRoom.reservationDate || ""},
-        notes = ${updatedRoom.notes || ""}
+        breakfast = ${updatedRoom.breakfast}
       WHERE id = ${updatedRoom.id}
     `;
 
@@ -59,9 +55,7 @@ export async function PUT(request) {
         id,
         room_number as "roomNumber",
         status,
-        breakfast,
-        reservation_date as "reservationDate",
-        notes
+        breakfast
       FROM rooms
       WHERE id = ${updatedRoom.id}
     `;

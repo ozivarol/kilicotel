@@ -286,7 +286,7 @@ export default function IstatistiklerPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                 <div className="flex items-center justify-between">
                   <div>
@@ -311,20 +311,6 @@ export default function IstatistiklerPage() {
                   </div>
                   <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                     <div className="w-6 h-6 bg-red-500 rounded"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Rezerve</p>
-                    <p className="text-3xl font-bold text-yellow-600">
-                      {stats.rezerveOdalar}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <div className="w-6 h-6 bg-yellow-500 rounded"></div>
                   </div>
                 </div>
               </div>

@@ -79,15 +79,6 @@ export default function Calendar({ onDateSelect, selectedDate, rooms = [] }) {
     rooms.forEach((room) => {
       if (room.status === "dolu") {
         dolu++;
-      } else if (room.status === "rezerve" && room.reservationDate) {
-        const reservationDate = new Date(room.reservationDate);
-        if (
-          reservationDate.getFullYear() === dayDate.getFullYear() &&
-          reservationDate.getMonth() === dayDate.getMonth() &&
-          reservationDate.getDate() === dayDate.getDate()
-        ) {
-          rezerve++;
-        }
       }
     });
 

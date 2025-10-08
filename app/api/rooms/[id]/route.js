@@ -8,15 +8,22 @@ export async function GET(request, { params }) {
         id,
         room_number as "roomNumber",
         status,
-        breakfast,
-        reservation_date as "reservationDate",
-        notes
+        breakfast
       FROM rooms
       WHERE id = ${params.id}
     `;
 
     if (rows.length > 0) {
-      return NextResponse.json(rows[0]);
+      const reservationsResult = await sql`
+        SELECT * FROM reservations 
+        WHERE room_id = ${params.id}
+        ORDER BY reservation_date ASC
+      `;
+
+      return NextResponse.json({
+        ...rows[0],
+        reservations: reservationsResult.rows,
+      });
     } else {
       return NextResponse.json({ error: "Oda bulunamadı" }, { status: 404 });
     }
