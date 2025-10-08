@@ -8,7 +8,7 @@ export async function GET() {
         id,
         room_number as "roomNumber",
         status,
-        breakfast
+        breakfast_count as "breakfastCount"
       FROM rooms
       ORDER BY id ASC
     `;
@@ -36,7 +36,7 @@ export async function PUT(request) {
       UPDATE rooms
       SET 
         status = ${updatedRoom.status},
-        breakfast = ${updatedRoom.breakfast}
+        breakfast_count = ${updatedRoom.breakfastCount || 0}
       WHERE id = ${updatedRoom.id}
     `;
 
@@ -55,7 +55,7 @@ export async function PUT(request) {
         id,
         room_number as "roomNumber",
         status,
-        breakfast
+        breakfast_count as "breakfastCount"
       FROM rooms
       WHERE id = ${updatedRoom.id}
     `;

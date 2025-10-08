@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
         id,
         room_number as "roomNumber",
         status,
-        breakfast
+        breakfast_count as "breakfastCount"
       FROM rooms
       WHERE id = ${params.id}
     `;

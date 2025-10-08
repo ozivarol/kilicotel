@@ -26,7 +26,7 @@ export default function OdalarPage() {
   const getStats = () => {
     const bos = rooms.filter((r) => r.status === "boş").length;
     const dolu = rooms.filter((r) => r.status === "dolu").length;
-    const kahvalti = rooms.filter((r) => r.breakfast === true).length;
+    const kahvalti = rooms.reduce((sum, r) => sum + (r.breakfastCount || 0), 0);
     return { bos, dolu, kahvalti };
   };
 
@@ -80,10 +80,11 @@ export default function OdalarPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Kahvaltılı</p>
+                <p className="text-sm text-gray-600 mb-1">Toplam Kahvaltı</p>
                 <p className="text-3xl font-bold text-gray-900">
                   {stats.kahvalti}
                 </p>
+                <p className="text-xs text-gray-500 mt-1">kişi</p>
               </div>
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                 <svg
@@ -149,29 +150,12 @@ export default function OdalarPage() {
                       >
                         {room.status.toUpperCase()}
                       </p>
-                      {room.breakfast && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+                      {room.breakfastCount > 0 && (
+                        <div className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-orange-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">
+                            {room.breakfastCount}
+                          </span>
                         </div>
-                      )}
-                      {room.status === "rezerve" && room.reservationDate && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(room.reservationDate).toLocaleDateString(
-                            "tr-TR",
-                            { day: "2-digit", month: "2-digit" }
-                          )}
-                        </p>
                       )}
                     </div>
                   </div>

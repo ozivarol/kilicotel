@@ -40,10 +40,12 @@ export async function GET(request) {
       (h) => h.new_status === "dolu"
     ).length;
 
+    const totalBreakfastCount = rooms.reduce((sum, r) => sum + (r.breakfast_count || 0), 0);
+    
     const currentStats = {
       bosOdalar: rooms.filter((r) => r.status === "boş").length,
       doluOdalar: rooms.filter((r) => r.status === "dolu").length,
-      kahvaltiVerilen: rooms.filter((r) => r.breakfast === true).length,
+      kahvaltiVerilen: totalBreakfastCount,
     };
 
     return Response.json({

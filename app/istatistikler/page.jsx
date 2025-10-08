@@ -282,7 +282,7 @@ export default function IstatistiklerPage() {
                     </svg>
                   </div>
                 </div>
-                <p className="text-xs opacity-75">Aktif kahvaltılı oda sayısı</p>
+                <p className="text-xs opacity-75">Toplam kahvaltı kişi sayısı</p>
               </div>
             </div>
 

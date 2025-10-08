@@ -8,7 +8,7 @@ export async function GET() {
         id INTEGER PRIMARY KEY,
         room_number VARCHAR(10) NOT NULL,
         status VARCHAR(20) DEFAULT 'boş',
-        breakfast BOOLEAN DEFAULT false
+        breakfast_count INTEGER DEFAULT 0
       )
     `;
 
@@ -57,8 +57,8 @@ export async function GET() {
     if (roomsCount.rows[0].count === "0") {
       for (let i = 1; i <= 22; i++) {
         await sql`
-          INSERT INTO rooms (id, room_number, status, breakfast)
-          VALUES (${i}, ${i.toString()}, 'boş', false)
+          INSERT INTO rooms (id, room_number, status, breakfast_count)
+          VALUES (${i}, ${i.toString()}, 'boş', 0)
         `;
       }
     }

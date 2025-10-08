@@ -58,15 +58,16 @@ export default function OdaDetayPage() {
     let updates = { status: newStatus };
 
     if (newStatus === "boş") {
-      updates.breakfast = false;
+      updates.breakfastCount = 0;
     }
 
     updateRoom(updates);
   };
 
-  const handleBreakfastToggle = () => {
+  const handleBreakfastChange = (count) => {
     if (room.status === "dolu") {
-      updateRoom({ breakfast: !room.breakfast });
+      const validCount = Math.max(0, parseInt(count) || 0);
+      updateRoom({ breakfastCount: validCount });
     }
   };
 
@@ -190,15 +191,17 @@ export default function OdaDetayPage() {
 
           {room.status === "dolu" && (
             <div className="pt-4 border-t border-gray-200">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={room.breakfast || false}
-                  onChange={handleBreakfastToggle}
-                  className="w-5 h-5 rounded border-gray-300 text-[#6943b8] focus:ring-[#6943b8]"
-                />
-                <span className="font-medium text-gray-700">Kahvaltı Verildi</span>
+              <label className="block mb-2 font-semibold text-gray-700">
+                Kahvaltı Kişi Sayısı
               </label>
+              <input
+                type="number"
+                min="0"
+                value={room.breakfastCount || 0}
+                onChange={(e) => handleBreakfastChange(e.target.value)}
+                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6943b8] focus:border-[#6943b8]"
+                placeholder="Kaç kişiye kahvaltı verildi?"
+              />
             </div>
           )}
 
