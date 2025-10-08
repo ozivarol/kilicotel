@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Calendar({ onDateSelect, selectedDate, rooms = [] }) {
+export default function Calendar({ onDateSelect, selectedDate, reservations = [] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthNames = [
@@ -69,20 +69,24 @@ export default function Calendar({ onDateSelect, selectedDate, rooms = [] }) {
   };
 
   const getDayStats = (day) => {
-    if (!day) return { dolu: 0, rezerve: 0 };
+    if (!day) return { rezerve: 0 };
     
     const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     
-    let dolu = 0;
     let rezerve = 0;
 
-    rooms.forEach((room) => {
-      if (room.status === "dolu") {
-        dolu++;
+    reservations.forEach((reservation) => {
+      const reservationDate = new Date(reservation.reservation_date);
+      if (
+        reservationDate.getFullYear() === dayDate.getFullYear() &&
+        reservationDate.getMonth() === dayDate.getMonth() &&
+        reservationDate.getDate() === dayDate.getDate()
+      ) {
+        rezerve++;
       }
     });
 
-    return { dolu, rezerve };
+    return { rezerve };
   };
 
   return (
@@ -138,14 +142,9 @@ export default function Calendar({ onDateSelect, selectedDate, rooms = [] }) {
               `}
             >
               <span>{day}</span>
-              {day && (stats.dolu > 0 || stats.rezerve > 0) && (
+              {day && stats.rezerve > 0 && (
                 <div className="flex gap-0.5 mt-0.5">
-                  {stats.dolu > 0 && (
-                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                  )}
-                  {stats.rezerve > 0 && (
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                  )}
+                  <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
                 </div>
               )}
             </button>
