@@ -13,6 +13,25 @@ export async function GET() {
     `;
 
     await sql`
+      DO $$ 
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name = 'rooms' AND column_name = 'breakfast'
+        ) THEN
+          ALTER TABLE rooms DROP COLUMN breakfast;
+        END IF;
+        
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name = 'rooms' AND column_name = 'breakfast_count'
+        ) THEN
+          ALTER TABLE rooms ADD COLUMN breakfast_count INTEGER DEFAULT 0;
+        END IF;
+      END $$;
+    `;
+
+    await sql`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(100) UNIQUE NOT NULL,

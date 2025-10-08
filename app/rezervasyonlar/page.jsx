@@ -42,6 +42,7 @@ export default function RezervasyonlarPage() {
   };
 
   const getStats = () => {
+    if (!Array.isArray(rooms)) return { bos: 0, dolu: 0, rezerve: 0 };
     const bos = rooms.filter((r) => r.status === "boş").length;
     const dolu = rooms.filter((r) => r.status === "dolu").length;
     const rezerve = allReservations.length;
