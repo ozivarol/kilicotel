@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Calendar({ onDateSelect, selectedDate }) {
+export default function Calendar({ onDateSelect, selectedDate, rooms = [] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthNames = [
@@ -68,6 +68,32 @@ export default function Calendar({ onDateSelect, selectedDate }) {
     );
   };
 
+  const getDayStats = (day) => {
+    if (!day) return { dolu: 0, rezerve: 0 };
+    
+    const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    
+    let dolu = 0;
+    let rezerve = 0;
+
+    rooms.forEach((room) => {
+      if (room.status === "dolu") {
+        dolu++;
+      } else if (room.status === "rezerve" && room.reservationDate) {
+        const reservationDate = new Date(room.reservationDate);
+        if (
+          reservationDate.getFullYear() === dayDate.getFullYear() &&
+          reservationDate.getMonth() === dayDate.getMonth() &&
+          reservationDate.getDate() === dayDate.getDate()
+        ) {
+          rezerve++;
+        }
+      }
+    });
+
+    return { dolu, rezerve };
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
       <div className="flex items-center justify-between mb-4">
@@ -104,23 +130,36 @@ export default function Calendar({ onDateSelect, selectedDate }) {
           </div>
         ))}
 
-        {days.map((day, index) => (
-          <button
-            key={index}
-            onClick={() => handleDayClick(day)}
-            disabled={!day}
-            className={`
-              aspect-square flex items-center justify-center rounded-lg text-sm md:text-base font-medium transition-all
-              ${!day ? "invisible" : ""}
-              ${isToday(day) ? "bg-blue-100 text-blue-700 font-bold" : ""}
-              ${isSelected(day) ? "bg-[#6943b8] text-white font-bold shadow-md" : ""}
-              ${!isToday(day) && !isSelected(day) ? "hover:bg-gray-100 text-gray-700" : ""}
-              ${day ? "cursor-pointer" : ""}
-            `}
-          >
-            {day}
-          </button>
-        ))}
+        {days.map((day, index) => {
+          const stats = getDayStats(day);
+          return (
+            <button
+              key={index}
+              onClick={() => handleDayClick(day)}
+              disabled={!day}
+              className={`
+                aspect-square flex flex-col items-center justify-center rounded-lg text-sm md:text-base font-medium transition-all relative
+                ${!day ? "invisible" : ""}
+                ${isToday(day) ? "bg-blue-100 text-blue-700 font-bold" : ""}
+                ${isSelected(day) ? "bg-[#6943b8] text-white font-bold shadow-md" : ""}
+                ${!isToday(day) && !isSelected(day) ? "hover:bg-gray-100 text-gray-700" : ""}
+                ${day ? "cursor-pointer" : ""}
+              `}
+            >
+              <span>{day}</span>
+              {day && (stats.dolu > 0 || stats.rezerve > 0) && (
+                <div className="flex gap-0.5 mt-0.5">
+                  {stats.dolu > 0 && (
+                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                  )}
+                  {stats.rezerve > 0 && (
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                  )}
+                </div>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

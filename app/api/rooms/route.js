@@ -44,7 +44,10 @@ export async function PUT(request) {
       WHERE id = ${updatedRoom.id}
     `;
 
-    if (oldRoomData.length > 0 && oldRoomData[0].status !== updatedRoom.status) {
+    if (
+      oldRoomData.length > 0 &&
+      oldRoomData[0].status !== updatedRoom.status
+    ) {
       await sql`
         INSERT INTO room_history (room_id, room_number, old_status, new_status, created_at)
         VALUES (${updatedRoom.id}, ${updatedRoom.roomNumber}, ${oldRoomData[0].status}, ${updatedRoom.status}, NOW())

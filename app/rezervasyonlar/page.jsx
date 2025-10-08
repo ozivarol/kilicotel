@@ -110,7 +110,21 @@ export default function RezervasyonlarPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <Calendar onDateSelect={setSelectedDate} selectedDate={selectedDate} />
+            <Calendar onDateSelect={setSelectedDate} selectedDate={selectedDate} rooms={rooms} />
+            
+            <div className="mt-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Gösterge:</h3>
+              <div className="flex flex-wrap gap-4 text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-gray-700">Dolu Oda Var</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <span className="text-gray-700">Rezerve Oda Var</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div>
