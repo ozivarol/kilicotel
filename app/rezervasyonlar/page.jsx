@@ -43,10 +43,25 @@ export default function RezervasyonlarPage() {
 
   const getStats = () => {
     if (!Array.isArray(rooms)) return { bos: 0, dolu: 0, rezerve: 0 };
-    const bos = rooms.filter((r) => r.status === "boş").length;
-    const dolu = rooms.filter((r) => r.status === "dolu").length;
-    const rezerve = allReservations.length;
-    return { bos, dolu, rezerve };
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selected = new Date(selectedDate);
+    selected.setHours(0, 0, 0, 0);
+    
+    const isToday = selected.getTime() === today.getTime();
+    
+    if (isToday) {
+      const bos = rooms.filter((r) => r.status === "boş").length;
+      const dolu = rooms.filter((r) => r.status === "dolu").length;
+      const rezerve = getReservationsForDate().length;
+      return { bos, dolu, rezerve };
+    } else {
+      const rezerveForDate = getReservationsForDate().length;
+      const totalRooms = rooms.length;
+      const bos = totalRooms - rezerveForDate;
+      return { bos, dolu: 0, rezerve: rezerveForDate };
+    }
   };
 
   if (loading) {

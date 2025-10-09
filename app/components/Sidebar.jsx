@@ -16,6 +16,7 @@ export default function Sidebar() {
     { name: "Rezervasyonlar", path: "/rezervasyonlar" },
     { name: "Finans", path: "/finans" },
     { name: "İstatistikler", path: "/istatistikler" },
+    { name: "Ayarlar", path: "/ayarlar" },
   ];
 
   const handleLogout = async () => {
