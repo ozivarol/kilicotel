@@ -45,8 +45,8 @@ export default function OdalarPage() {
     if (details.length === 0) return;
 
     const text = details
-      .map((item) => `Oda ${item.roomNumber}: ${item.count} kişi`)
-      .join("\n");
+      .map((item) => `Oda ${item.roomNumber}: ${item.count} kişi kahvaltı`)
+      .join("\n") + `\n\nToplam Kahvaltı: ${stats.kahvalti} kişi`;
 
     navigator.clipboard.writeText(text).then(() => {
       setCopySuccess(true);
@@ -247,7 +247,7 @@ export default function OdalarPage() {
                     Oda {item.roomNumber}
                   </p>
                   <p className="text-2xl font-bold text-orange-900">
-                    {item.count} <span className="text-sm">kişi</span>
+                    {item.count} <span className="text-sm">kişi kahvaltı</span>
                   </p>
                 </div>
               ))}
