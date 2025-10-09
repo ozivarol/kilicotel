@@ -8,7 +8,6 @@ export default function IstatistiklerPage() {
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
   const [loading, setLoading] = useState(true);
-  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     fetchStats();
@@ -87,19 +86,6 @@ export default function IstatistiklerPage() {
       default:
         return "";
     }
-  };
-
-  const copyBreakfastList = () => {
-    if (!stats?.breakfastDetails || stats.breakfastDetails.length === 0) return;
-
-    const text = stats.breakfastDetails
-      .map((item) => `Oda ${item.roomNumber}: ${item.count} kişi`)
-      .join("\n");
-
-    navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    });
   };
 
   if (loading) {
@@ -329,76 +315,6 @@ export default function IstatistiklerPage() {
                 </div>
               </div>
             </div>
-
-            {stats.breakfastDetails && stats.breakfastDetails.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">
-                    Bugünkü Kahvaltı Listesi
-                  </h3>
-                  <button
-                    onClick={copyBreakfastList}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#6943b8] hover:bg-[#5a38a0] text-white rounded-lg text-sm font-medium transition-colors"
-                  >
-                    {copySuccess ? (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        Kopyalandı!
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                          />
-                        </svg>
-                        Kopyala
-                      </>
-                    )}
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {stats.breakfastDetails.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-3"
-                    >
-                      <p className="text-xs text-orange-700 font-semibold mb-1">
-                        Oda {item.roomNumber}
-                      </p>
-                      <p className="text-2xl font-bold text-orange-900">
-                        {item.count} <span className="text-sm">kişi</span>
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 p-3 bg-orange-100 rounded-lg">
-                  <p className="text-sm text-orange-900 font-semibold">
-                    Toplam Kahvaltı: {stats.kahvaltiVerilen} kişi
-                  </p>
-                </div>
-              </div>
-            )}
 
             {stats.paymentStats && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
