@@ -48,12 +48,35 @@ export async function GET(request) {
       kahvaltiVerilen: totalBreakfastCount,
     };
 
+    const breakfastDetails = rooms
+      .filter((r) => r.status === "dolu" && r.breakfast_count > 0)
+      .map((r) => ({
+        roomNumber: r.room_number,
+        count: r.breakfast_count,
+      }));
+
+    const paymentStats = {
+      nakit: 0,
+      kart: 0,
+      internet: 0,
+    };
+
+    finances
+      .filter((f) => f.type === "income" && f.payment_type)
+      .forEach((f) => {
+        if (paymentStats.hasOwnProperty(f.payment_type)) {
+          paymentStats[f.payment_type] += parseFloat(f.amount);
+        }
+      });
+
     return Response.json({
       success: true,
       stats: {
         ...currentStats,
         kahvaltiSayisi,
         satilanOdaSayisi: doluOlmaSayisi,
+        breakfastDetails,
+        paymentStats,
       },
     });
   } catch (error) {

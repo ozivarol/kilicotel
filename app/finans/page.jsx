@@ -158,7 +158,19 @@ export default function FinansPage() {
     );
     const net = totalIncome - totalExpense;
 
-    return { totalIncome, totalExpense, net };
+    const paymentStats = {
+      nakit: 0,
+      kart: 0,
+      internet: 0,
+    };
+
+    filtered.incomes.forEach((income) => {
+      if (income.paymentType && paymentStats.hasOwnProperty(income.paymentType)) {
+        paymentStats[income.paymentType] += income.amount;
+      }
+    });
+
+    return { totalIncome, totalExpense, net, paymentStats };
   };
 
   if (loading) {
@@ -344,6 +356,79 @@ export default function FinansPage() {
                   />
                 </svg>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6 mb-6">
+          <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+            Ödeme Tipi Dağılımı
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-semibold text-green-700">Nakit</p>
+                <svg
+                  className="w-6 h-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-2xl md:text-3xl font-bold text-green-900">
+                ₺{stats.paymentStats.nakit.toFixed(2)}
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-semibold text-blue-700">Kart</p>
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  />
+                </svg>
+              </div>
+              <p className="text-2xl md:text-3xl font-bold text-blue-900">
+                ₺{stats.paymentStats.kart.toFixed(2)}
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm font-semibold text-purple-700">İnternet</p>
+                <svg
+                  className="w-6 h-6 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                  />
+                </svg>
+              </div>
+              <p className="text-2xl md:text-3xl font-bold text-purple-900">
+                ₺{stats.paymentStats.internet.toFixed(2)}
+              </p>
             </div>
           </div>
         </div>

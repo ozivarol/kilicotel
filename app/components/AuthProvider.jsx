@@ -10,6 +10,13 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     checkAuth();
+    runAutoCheckout();
+  }, []);
+
+  useEffect(() => {
+    if (pathname !== "/login") {
+      checkAuth();
+    }
   }, [pathname]);
 
   const checkAuth = async () => {
@@ -29,6 +36,14 @@ export default function AuthProvider({ children }) {
       }
     } catch (error) {
       router.push("/login");
+    }
+  };
+
+  const runAutoCheckout = async () => {
+    try {
+      await fetch("/api/auto-checkout", { method: "POST" });
+    } catch (error) {
+      console.error("Auto-checkout failed:", error);
     }
   };
 
