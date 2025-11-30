@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/reset-all-rooms",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
+

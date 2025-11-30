@@ -8,10 +8,13 @@ export default function IstatistiklerPage() {
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     fetchStats();
   }, [filter, customStart, customEnd]);
+
+  
 
   const fetchStats = async () => {
     try {
